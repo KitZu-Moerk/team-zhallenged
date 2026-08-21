@@ -1,0 +1,731 @@
+<title>Team Zhallenged</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Barlow:ital,wght@0,300;0,400;0,500;1,300&family=Barlow+Condensed:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ground:        #080A10;
+    --surface:       #101420;
+    --surface-hi:    #181D2E;
+    --border:        #1E2438;
+    --accent:        #00BFA0;
+    --accent-glow:   rgba(0, 191, 160, 0.15);
+    --accent-dim:    rgba(0, 191, 160, 0.08);
+    --text:          #E0DBD2;
+    --text-muted:    #5A607A;
+    --text-dim:      #8A90A6;
+    --win:           #27AE76;
+    --loss:          #C0392B;
+    --role-top:      #D4A027;
+    --role-jgl:      #2EAA5A;
+    --role-mid:      #00BFA0;
+    --role-adc:      #C0392B;
+    --role-sup:      #4A7FC1;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ground);
+    color: var(--text);
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+    height: 64px;
+    background: rgba(8, 10, 16, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+  nav.scrolled { border-bottom-color: var(--border); }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .nav-mark {
+    width: 36px; height: 36px;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--ground);
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+  }
+  .nav-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(5rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem) clamp(3rem, 6vw, 5rem);
+    overflow: hidden;
+  }
+
+  /* dot grid texture */
+  #hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
+
+  /* oversized background Z */
+  .hero-bg-z {
+    position: absolute;
+    right: -0.05em;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: clamp(280px, 38vw, 580px);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(0, 191, 160, 0.07);
+    user-select: none;
+    pointer-events: none;
+    letter-spacing: -0.04em;
+  }
+
+  /* teal accent bar */
+  .hero-accent-line {
+    width: 48px;
+    height: 3px;
+    background: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+
+  .hero-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: clamp(3.5rem, 11vw, 9rem);
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    color: var(--text);
+    position: relative;
+    z-index: 1;
+  }
+  .hero-title span {
+    display: block;
+    color: var(--accent);
+  }
+
+  .hero-tagline {
+    margin-top: 1.75rem;
+    font-weight: 300;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--text-dim);
+    max-width: 36ch;
+    font-style: italic;
+    letter-spacing: 0.01em;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-cta-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  .btn-primary {
+    display: inline-block;
+    padding: 0.7rem 1.8rem;
+    background: var(--accent);
+    color: var(--ground);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-ghost {
+    display: inline-block;
+    padding: 0.7rem 1.8rem;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: clamp(1.5rem, 5vw, 4rem);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .hero-scroll-hint::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--text-muted);
+    display: block;
+  }
+
+  /* ── SECTIONS SHARED ── */
+  section { padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem); }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+  }
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .section-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    letter-spacing: -0.01em;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  /* ── ROSTER ── */
+  #roster { background: var(--ground); }
+
+  .roster-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .player-card {
+    background: var(--surface);
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    transition: background 0.2s;
+    cursor: default;
+  }
+  .player-card:hover { background: var(--surface-hi); }
+
+  .player-role {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    display: inline-block;
+    width: fit-content;
+  }
+  .role-top  { color: var(--role-top);  background: rgba(212, 160, 39,  0.1); }
+  .role-jgl  { color: var(--role-jgl);  background: rgba(46, 170, 90,   0.1); }
+  .role-mid  { color: var(--role-mid);  background: rgba(0, 191, 160,   0.1); }
+  .role-adc  { color: var(--role-adc);  background: rgba(192, 57, 43,   0.1); }
+  .role-sup  { color: var(--role-sup);  background: rgba(74, 127, 193,  0.1); }
+
+  .player-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    letter-spacing: 0.01em;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  .player-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  .player-champs {
+    margin-top: 0.4rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .champ-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    background: var(--accent-dim);
+    padding: 1px 6px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── RESULTS ── */
+  #results { background: var(--surface); }
+
+  .results-table-wrap { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  thead th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: left;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  tbody tr:hover { background: var(--surface-hi); }
+  tbody td {
+    padding: 0.9rem 1rem;
+    color: var(--text);
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .result-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    padding: 3px 9px;
+    min-width: 3rem;
+    text-align: center;
+    display: inline-block;
+  }
+  .result-W { background: rgba(39, 174, 118, 0.12); color: var(--win); }
+  .result-L { background: rgba(192, 57, 43,  0.12); color: var(--loss); }
+
+  .score {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-dim);
+  }
+  .score .score-w { color: var(--win); }
+  .score .score-l { color: var(--loss); }
+
+  .opponent {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  .match-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .match-format {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  /* ── ABOUT ── */
+  #about { background: var(--ground); }
+
+  .about-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: start;
+  }
+  .about-text p {
+    color: var(--text-dim);
+    line-height: 1.75;
+    font-weight: 300;
+    font-size: 1.05rem;
+    max-width: 52ch;
+  }
+  .about-text p + p { margin-top: 1rem; }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    align-self: start;
+  }
+  .stat-cell {
+    background: var(--surface);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .stat-value {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-value .accent { color: var(--accent); }
+  .stat-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem clamp(1.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background: var(--ground);
+  }
+  .footer-brand {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .footer-brand span { color: var(--accent); }
+
+  .social-links {
+    display: flex;
+    gap: 1.25rem;
+    list-style: none;
+  }
+  .social-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .social-links a:hover { color: var(--accent); }
+
+  .footer-copy {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .roster-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .about-inner {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 580px) {
+    .roster-grid {
+      grid-template-columns: 1fr;
+    }
+    .nav-links { display: none; }
+    .hero-cta-row { flex-direction: column; align-items: flex-start; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#hero" class="nav-brand">
+    <div class="nav-mark">TZ</div>
+    <span class="nav-name">Team Zhallenged</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#roster">Roster</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-z" aria-hidden="true">Z</div>
+  <div class="hero-accent-line"></div>
+  <p class="hero-eyebrow">Est. 2024 &mdash; Amateur League of Legends</p>
+  <h1 class="hero-title">
+    TEAM<br>
+    <span>ZHALLENGED</span>
+  </h1>
+  <p class="hero-tagline">We show up. We adapt. We close.</p>
+  <div class="hero-cta-row">
+    <a href="#roster" class="btn-primary">Meet the Roster</a>
+    <a href="#results" class="btn-ghost">Recent Results</a>
+  </div>
+  <span class="hero-scroll-hint" aria-hidden="true">Scroll</span>
+</section>
+
+<!-- ROSTER -->
+<section id="roster">
+  <div class="section-header">
+    <span class="section-label">Season 2025</span>
+    <h2 class="section-title">Roster</h2>
+  </div>
+  <div class="roster-grid">
+    <article class="player-card">
+      <span class="player-role role-top">Top</span>
+      <div class="player-name">Nordstorm</div>
+      <div class="player-meta">Denmark</div>
+      <div class="player-champs">
+        <span class="champ-tag">Darius</span>
+        <span class="champ-tag">Garen</span>
+        <span class="champ-tag">Malphite</span>
+      </div>
+    </article>
+    <article class="player-card">
+      <span class="player-role role-jgl">Jungle</span>
+      <div class="player-name">Ravenwing</div>
+      <div class="player-meta">Denmark</div>
+      <div class="player-champs">
+        <span class="champ-tag">Vi</span>
+        <span class="champ-tag">Sejuani</span>
+        <span class="champ-tag">Hecarim</span>
+      </div>
+    </article>
+    <article class="player-card">
+      <span class="player-role role-mid">Mid</span>
+      <div class="player-name">Hexblade</div>
+      <div class="player-meta">Denmark</div>
+      <div class="player-champs">
+        <span class="champ-tag">Ahri</span>
+        <span class="champ-tag">Syndra</span>
+        <span class="champ-tag">Viktor</span>
+      </div>
+    </article>
+    <article class="player-card">
+      <span class="player-role role-adc">Bot</span>
+      <div class="player-name">VoidCarry</div>
+      <div class="player-meta">Denmark</div>
+      <div class="player-champs">
+        <span class="champ-tag">Jinx</span>
+        <span class="champ-tag">Caitlyn</span>
+        <span class="champ-tag">Draven</span>
+      </div>
+    </article>
+    <article class="player-card">
+      <span class="player-role role-sup">Support</span>
+      <div class="player-name">Ironclad</div>
+      <div class="player-meta">Denmark</div>
+      <div class="player-champs">
+        <span class="champ-tag">Thresh</span>
+        <span class="champ-tag">Leona</span>
+        <span class="champ-tag">Nami</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results">
+  <div class="section-header">
+    <span class="section-label">2025</span>
+    <h2 class="section-title">Recent Results</h2>
+  </div>
+  <div class="results-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Result</th>
+          <th>Score</th>
+          <th>Opponent</th>
+          <th>Format</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="result-badge result-W">W</span></td>
+          <td class="score"><span class="score-w">2</span>&thinsp;–&thinsp;<span class="score-l">1</span></td>
+          <td class="opponent">Team Arctic</td>
+          <td class="match-format">Bo3</td>
+          <td class="match-date">2025-08-17</td>
+        </tr>
+        <tr>
+          <td><span class="result-badge result-L">L</span></td>
+          <td class="score"><span class="score-l">0</span>&thinsp;–&thinsp;<span class="score-w">2</span></td>
+          <td class="opponent">Apex Rising</td>
+          <td class="match-format">Bo3</td>
+          <td class="match-date">2025-08-10</td>
+        </tr>
+        <tr>
+          <td><span class="result-badge result-W">W</span></td>
+          <td class="score"><span class="score-w">2</span>&thinsp;–&thinsp;<span class="score-l">0</span></td>
+          <td class="opponent">Bladedge</td>
+          <td class="match-format">Bo3</td>
+          <td class="match-date">2025-08-03</td>
+        </tr>
+        <tr>
+          <td><span class="result-badge result-W">W</span></td>
+          <td class="score"><span class="score-w">2</span>&thinsp;–&thinsp;<span class="score-l">1</span></td>
+          <td class="opponent">NightOwls</td>
+          <td class="match-format">Bo3</td>
+          <td class="match-date">2025-07-27</td>
+        </tr>
+        <tr>
+          <td><span class="result-badge result-L">L</span></td>
+          <td class="score"><span class="score-l">1</span>&thinsp;–&thinsp;<span class="score-w">2</span></td>
+          <td class="opponent">Phantom Tide</td>
+          <td class="match-format">Bo3</td>
+          <td class="match-date">2025-07-20</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <span class="section-label">The Team</span>
+    <h2 class="section-title">About</h2>
+  </div>
+  <div class="about-inner">
+    <div class="about-text">
+      <p>Team Zhallenged was founded in 2024 by a group of Danish players tired of solo queue and ready to compete as a unit. We play in the amateur Danish circuit and have been steadily climbing since our first match.</p>
+      <p>We're not the flashiest team in the bracket. We grind the fundamentals, adapt in-series, and take every game as a new challenge — hence the name. If you want to scrim or have questions, reach out.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-cell">
+        <div class="stat-value">3<span class="accent">–</span>2</div>
+        <div class="stat-label">Recent Record</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-value">5</div>
+        <div class="stat-label">Active Players</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-value"><span class="accent">DK</span></div>
+        <div class="stat-label">Region</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-value">2024</div>
+        <div class="stat-label">Founded</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Team <span>Zhallenged</span></div>
+  <ul class="social-links">
+    <li><a href="#">Discord</a></li>
+    <li><a href="#">Twitter</a></li>
+    <li><a href="#">Twitch</a></li>
+    <li><a href="#">OP.GG</a></li>
+  </ul>
+  <div class="footer-copy">&copy; 2025 Team Zhallenged</div>
+</footer>
+
+<script>
+  // Sticky nav scroll class
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+</script>
